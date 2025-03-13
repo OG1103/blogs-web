@@ -13,7 +13,7 @@ export default function PostList({ posts }: PostListProps) {
       <PostForm />
       <Box sx={{ mt: 8 }}>
         {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+          <PostCard key={post?.id} post={post} />
         ))}
       </Box>
     </Box>

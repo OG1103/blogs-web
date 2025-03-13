@@ -1,34 +1,43 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/router"
-import { TextField, Button, Box, CircularProgress } from "@mui/material"
+import { useState } from "react";
+import { TextField, Button, Box, CircularProgress } from "@mui/material";
+import { useAuthContext } from "@/app/Providers/AuthContext";
+import { AxiosError } from "axios";
 
 export default function LoginForm() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const authContext = useAuthContext();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-  })
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false)
-      router.push("/home")
-    }, 1500)
-  }
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      await authContext.login(formData.email, formData.password);
+    } catch (err) {
+      const error = err as AxiosError;
+      if (error.response?.data) {
+        console.log(error.response.data);
+        alert(error.response.data);
+      } else {
+        console.error(err);
+        alert("An unexpected error occurred");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -55,11 +64,17 @@ export default function LoginForm() {
           variant="outlined"
         />
 
-        <Button type="submit" variant="contained" color="primary" fullWidth disabled={isLoading} sx={{ height: 44 }}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          disabled={isLoading}
+          sx={{ height: 44 }}
+        >
           {isLoading ? <CircularProgress size={24} /> : "Log In"}
         </Button>
       </Box>
     </form>
-  )
+  );
 }
-

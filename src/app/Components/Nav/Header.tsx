@@ -16,6 +16,7 @@ import {
   useTheme 
 } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu'
+import { useAuthContext } from "@/app/Providers/AuthContext"
 
 const navItems = [
   { name: "Home", path: "/home" },
@@ -29,13 +30,15 @@ export default function Header() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [drawerOpen, setDrawerOpen] = useState(false)
 
+  const authContext = useAuthContext();
+
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen)
   }
 
   const handleLogout = () => {
     // Simulate logout
-    router.push("/")
+    authContext.logout();
   }
 
   const drawer = (

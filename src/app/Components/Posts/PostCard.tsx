@@ -1,60 +1,74 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Card, CardContent, CardActions, Typography, Button, Avatar, Box, Collapse, TextField } from "@mui/material"
-import { formatDistanceToNow } from "date-fns"
-import MessageIcon from "@mui/icons-material/Message"
-import FavoriteIcon from "@mui/icons-material/Favorite"
-import type { Post } from "@/app/lib/types"
+import { useState } from "react";
+import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+  Button,
+  Avatar,
+  Box,
+  Collapse,
+  TextField,
+} from "@mui/material";
+import { formatDistanceToNow } from "date-fns";
+// import MessageIcon from "@mui/icons-material/Message"
+// import FavoriteIcon from "@mui/icons-material/Favorite"
+import type { Post } from "@/app/lib/types";
 
 interface PostCardProps {
-  post: Post
-  showActions?: boolean
+  post: Post;
+  showActions?: boolean;
 }
 
 export default function PostCard({ post, showActions = true }: PostCardProps) {
-  const [expanded, setExpanded] = useState(false)
-  const [comment, setComment] = useState("")
-  const [liked, setLiked] = useState(false)
+  const [expanded, setExpanded] = useState(false);
+  const [comment, setComment] = useState("");
+  // const [liked, setLiked] = useState(false)
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded)
-  }
+  // const handleExpandClick = () => {
+  //   setExpanded(!expanded)
+  // }
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setComment(e.target.value)
-  }
+    setComment(e.target.value);
+  };
 
   const handleSubmitComment = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // Handle comment submission
-    setComment("")
-    setExpanded(false)
-  }
+    setComment("");
+    setExpanded(false);
+  };
 
-  const handleLike = () => {
-    setLiked(!liked)
-  }
+  // const handleLike = () => {
+  //   setLiked(!liked)
+  // }
 
   return (
-    <Card sx={{ mb: 4, "&:hover": { boxShadow: 3, transition: "box-shadow 0.3s" } }}>
+    <Card
+      sx={{ mb: 4, "&:hover": { boxShadow: 3, transition: "box-shadow 0.3s" } }}
+    >
       <CardContent>
         <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-          <Avatar sx={{ mr: 2 }}>{post.author.name.charAt(0)}</Avatar>
+          <Avatar sx={{ mr: 2 }}>{post?.User.firstName.charAt(0)}</Avatar>
           <Box>
             <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-              {post.author.name}
+              {`${post?.User.firstName} ${post?.User.lastName} `}
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
+              {formatDistanceToNow(new Date(post?.createdAt ?? ""), {
+                addSuffix: true,
+              })}
             </Typography>
           </Box>
         </Box>
 
-        <Link href={`/post/${post.id}`} passHref>
+        <Link href={`/post/${post?.id}`} passHref>
           <Typography
             variant="h6"
             component="h2"
@@ -67,20 +81,25 @@ export default function PostCard({ post, showActions = true }: PostCardProps) {
               cursor: "pointer",
             }}
           >
-            {post.title}
+            {post?.title}
           </Typography>
         </Link>
 
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          {post.content.length > 200 ? `${post.content.substring(0, 200)}...` : post.content}
+          {post?.description?.length && post.description.length > 200
+            ? `${post.description.substring(0, 200)}...`
+            : post?.description || ""}
         </Typography>
 
-        {post.content.length > 200 && (
+        {post?.description?.length && post.description.length > 200 && (
           <Link href={`/post/${post.id}`} passHref>
             <Typography
               variant="body2"
               color="primary"
-              sx={{ "&:hover": { textDecoration: "underline" }, cursor: "pointer" }}
+              sx={{
+                "&:hover": { textDecoration: "underline" },
+                cursor: "pointer",
+              }}
             >
               Read more
             </Typography>
@@ -90,25 +109,7 @@ export default function PostCard({ post, showActions = true }: PostCardProps) {
 
       {showActions && (
         <>
-          <CardActions sx={{ px: 4, pb: 2 }}>
-            <Button
-              startIcon={
-                <FavoriteIcon
-                  sx={{
-                    color: liked ? "red" : "inherit",
-                    fill: liked ? "red" : "none",
-                  }}
-                />
-              }
-              onClick={handleLike}
-              size="small"
-            >
-              {post.likes + (liked ? 1 : 0)}
-            </Button>
-            <Button startIcon={<MessageIcon />} onClick={handleExpandClick} size="small">
-              {post.commentCount}
-            </Button>
-          </CardActions>
+          <CardActions sx={{ px: 4, pb: 2 }}></CardActions>
 
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent sx={{ pt: 0 }}>
@@ -125,7 +126,12 @@ export default function PostCard({ post, showActions = true }: PostCardProps) {
                   sx={{ mb: 2 }}
                 />
                 <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Button type="submit" variant="contained" size="small" disabled={!comment.trim()}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    size="small"
+                    disabled={!comment.trim()}
+                  >
                     Post
                   </Button>
                 </Box>
@@ -135,6 +141,5 @@ export default function PostCard({ post, showActions = true }: PostCardProps) {
         </>
       )}
     </Card>
-  )
+  );
 }
-

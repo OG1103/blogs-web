@@ -1,29 +1,28 @@
 export interface User {
     id: string
-    name: string
+    firstName: string
+    lastName: string
     email: string
   }
   
-  export interface Post {
+  export type Post = {
     id: string
     title: string
-    content: string
+    description: string
     createdAt: string
     updatedAt: string
-    authorId: string
-    author: User
-    likes: number
-    commentCount: number
-  }
+    userId: string
+    User: User
+  } | null
   
   export interface Comment {
     id: string
     content: string
     createdAt: string
     authorId: string
-    author: User
+    User: User
     postId: string
-    postTitle: string
+    Post: Post
   }
   
   

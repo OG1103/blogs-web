@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import axios from "axios";
-import { useAuthContext } from "../Providers/AuthContext";
-
+import { useRouter } from "next/router";
 export function useAxiosDefaults() {
-  const { logout } = useAuthContext();
+
+  const router = useRouter();
 
   useEffect(() => {
     // Set axios defaults
@@ -16,7 +16,7 @@ export function useAxiosDefaults() {
       async (error) => {
         if (error.response?.status === 401) {
           console.warn("Unauthorized request detected. Logging out...");
-          await logout();
+          router.push("/")
         }
         return Promise.reject(error);
       }
@@ -26,5 +26,5 @@ export function useAxiosDefaults() {
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
-  }, [logout]);
+  }, []);
 }

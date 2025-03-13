@@ -1,40 +1,54 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Card, CardContent, TextField, Button, Box, Avatar, CircularProgress } from "@mui/material"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Box,
+  Avatar,
+  CircularProgress,
+} from "@mui/material";
+import axios from "axios";
 
 export default function PostForm() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-  })
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false)
-      setFormData({ title: "", content: "" })
-      // Here you would normally update the posts list
-    }, 1000)
-  }
+    try {
+      await axios.post("/api/post/", {
+        title: formData.title,
+        description: formData.content,
+      });
+      alert("post created");
+    } catch (err) {
+      alert(err);
+    }
+  };
 
   return (
     <Card sx={{ boxShadow: 1 }}>
       <CardContent>
         <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
           <Avatar sx={{ mr: 2 }}>U</Avatar>
-          <Box sx={{ fontSize: "1.125rem", fontWeight: 500 }}>Share your thoughts...</Box>
+          <Box sx={{ fontSize: "1.125rem", fontWeight: 500 }}>
+            Share your thoughts...
+          </Box>
         </Box>
 
         <form onSubmit={handleSubmit}>
@@ -67,7 +81,9 @@ export default function PostForm() {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={isLoading || !formData.title.trim() || !formData.content.trim()}
+              disabled={
+                isLoading || !formData.title.trim() || !formData.content.trim()
+              }
             >
               {isLoading ? <CircularProgress size={24} /> : "Post"}
             </Button>
@@ -75,6 +91,5 @@ export default function PostForm() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
-

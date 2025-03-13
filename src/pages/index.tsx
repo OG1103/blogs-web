@@ -1,7 +1,4 @@
-"use client"
-
 import { useState } from "react"
-import { useRouter } from "next/router"
 import { Card, CardContent, Typography, Box, Container, styled } from "@mui/material"
 import { motion } from "framer-motion"
 import LoginForm from "@/app/Components/Auth/LoginForm"
@@ -17,8 +14,6 @@ const MotionItem = styled(motion.div)({
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true)
-  const router = useRouter()
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {

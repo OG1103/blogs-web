@@ -1,33 +1,44 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Card, CardContent, TextField, Button, Box, Avatar, CircularProgress } from "@mui/material"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Box,
+  Avatar,
+  CircularProgress,
+} from "@mui/material";
+import axios from "axios";
 
 interface CommentFormProps {
-  postId: string
+  postId: number;
 }
 
 export default function CommentForm({ postId }: CommentFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
-  const [content, setContent] = useState("")
+  const [isLoading, setIsLoading] = useState(false);
+  const [content, setContent] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setContent(e.target.value)
-  }
+    setContent(e.target.value);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false)
-      setContent("")
-      // Here you would normally update the comments list
-    }, 1000)
-  }
+    e.preventDefault();
+    setIsLoading(true);
+    console.log(content,postId);
+    try {
+      await axios.post("/api/comment/", { content, postId });
+      alert("Comment added");
+    } catch (err) {
+      alert(err);
+    }finally{
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Card sx={{ boxShadow: 1 }}>
@@ -65,6 +76,5 @@ export default function CommentForm({ postId }: CommentFormProps) {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
-

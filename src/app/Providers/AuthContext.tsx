@@ -1,17 +1,31 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import axios from "axios";
+"use client";
+
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/router";
 
 type TUser = {
   id: number;
-  username: string;
+  email: string;
+  name: string;
 };
 
 type TAuthContextType = {
   user: TUser | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<void>;
-  register: (username: string, password: string) => Promise<void>;
+  register: (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+  ) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -22,44 +36,69 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
-    checkAuthStatus();
+    setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (isClient) checkAuthStatus();
+  }, [isClient]);
 
   const checkAuthStatus = async () => {
     try {
+      if (user) return;
+
+      console.log("Making a call");
       const response = await axios.get("/api/user/");
-      setUser(response.data);
-    } catch (error) {
+      setUser(response.data.user);
+      console.log("user", response.data.user);
+      router.push("/home");
+    } catch (err) {
+      const error = err as AxiosError;
+      if (error.response?.data) {
+        console.log(error.response.data);
+      } else {
+        console.error("unexpected error");
+      }
       setUser(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const login = async (username: string, password: string) => {
+  const login = async (email: string, password: string) => {
     try {
-      await axios.post("/api/login", { username, password });
+      await axios.post("/api/user/login", { email, password });
       await checkAuthStatus();
-      router.push("/home");
     } catch (err) {
-      alert(err);
+      throw err;
     }
   };
 
-  const register = async (username: string, password: string) => {
+  const register = async (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+  ) => {
     try {
-      await axios.post("/api/register", { username, password });
-      await checkAuthStatus();
+      await axios.post("/api/user/register", {
+        firstName,
+        lastName,
+        email,
+        password,
+      });
     } catch (err) {
-      alert(err);
+      throw err;
     }
   };
 
   const logout = async () => {
-    await axios.post("/api/logout", {});
+    await axios.post("/api/user/logout", {});
     setUser(null);
-    router.push("/")
+    router.push("/");
   };
 
   return (
