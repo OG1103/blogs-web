@@ -72,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
      const response =  await axios.post("/api/user/login", { email, password });
      localStorage.setItem("token", response.data.token);
-     
+
       await checkAuthStatus();
     } catch (err) {
       throw err;
@@ -100,6 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     await axios.post("/api/user/logout", {});
     setUser(null);
+    localStorage.removeItem("token");
     router.push("/");
   };
 

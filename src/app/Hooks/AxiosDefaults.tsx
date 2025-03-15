@@ -28,6 +28,7 @@ export function useAxiosDefaults() {
       async (error) => {
         if (error.response?.status === 401) {
           console.warn("Unauthorized request detected. Logging out...");
+          localStorage.removeItem("token");
           router.push("/");
         }
         return Promise.reject(error);
