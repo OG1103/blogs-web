@@ -8,7 +8,7 @@ export function useAxiosDefaults() {
   useEffect(() => {
     // Set axios defaults
     axios.defaults.withCredentials = true;
-    axios.defaults.baseURL = process.env.REACT_APP_API_URL || "http://localhost:5000"; 
+    axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL; 
 
     // Add response interceptor
     const interceptor = axios.interceptors.response.use(
