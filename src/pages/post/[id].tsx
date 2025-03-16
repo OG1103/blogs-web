@@ -1,5 +1,3 @@
-"use client";
-
 import { useRouter } from "next/router";
 import MainLayout from "@/app/Layouts/basicLayout";
 import PostDetail from "@/app/Components/Posts/PostDetail";
