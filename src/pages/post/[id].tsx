@@ -21,7 +21,7 @@ export default function PostPage() {
 
     async function getPost() {
       try {
-        const response = await axios.get(`api/post/${id}`);
+        const response = await axios.get(`/api/post/${id}`);
         setPost(response.data.post);
         setPostId(response.data.post.id);
         console.log("post", response.data.post)
@@ -31,7 +31,7 @@ export default function PostPage() {
     }
     async function getPostComments() {
       try {
-        const response = await axios.get(`api/comment/${id}`);
+        const response = await axios.get(`/api/comment/${id}`);
         setComments(response.data.comments);
       } catch (err) {
         console.log(err);
