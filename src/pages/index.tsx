@@ -25,7 +25,7 @@ export default function AuthPage() {
     fetch('/instance-info.json')
       .then((response) => response.json())
       .then((data) => {
-        setInstance(data);
+        setInstance(data["uniqueId"]);
       })
       .catch((error) => {
         console.error('Error fetching instance info:', error);
