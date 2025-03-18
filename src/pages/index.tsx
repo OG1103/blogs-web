@@ -18,13 +18,14 @@ export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState<string | null>(null);
+  const [instance,setInstance] = useState("");
 
   useEffect(() => {
     // Fetch the instance-info.json file
     fetch('/instance-info.json')
       .then((response) => response.json())
       .then((data) => {
-        console.log('Instance Info:', data);
+        setInstance(data);
       })
       .catch((error) => {
         console.error('Error fetching instance info:', error);
@@ -58,7 +59,7 @@ export default function AuthPage() {
       <MotionContainer initial="hidden" animate="visible" variants={containerVariants}>
         <MotionItem variants={itemVariants}>
           <Typography variant="h3" component="h1" align="center" sx={{ mb: 8, fontWeight: "bold" }}>
-            Share Your Thoughts
+            {`Share Your Thoughts - ${instance}` }
           </Typography>
         </MotionItem>
 

@@ -37,7 +37,6 @@ export default function LoginForm() {
           alert(error.response.data.err.message || "An error occurred.");
         }
       } else {
-        console.error(err);
         alert("An unexpected error occurred");
       }
     } finally {

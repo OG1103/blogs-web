@@ -38,7 +38,6 @@ export default function SignupForm() {
         console.log(error.response.data);
         alert(error.response.data);
       } else {
-        console.error(err);
         alert("An unexpected error occurred");
       }
     } finally {
