@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, Typography, Box, Container, styled, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import LoginForm from "@/app/Components/Auth/LoginForm";
@@ -18,6 +18,18 @@ export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const [resetEmail, setResetEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Fetch the instance-info.json file
+    fetch('/instance-info.json')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Instance Info:', data);
+      })
+      .catch((error) => {
+        console.error('Error fetching instance info:', error);
+      });
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
