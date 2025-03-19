@@ -17,6 +17,7 @@ export function useAxiosDefaults() {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
+        config.headers["X-Frontend-Secret"] = process.env.NEXT_PUBLIC_SECRET_KEY; 
         return config;
       },
       (error) => Promise.reject(error)
