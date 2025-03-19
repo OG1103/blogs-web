@@ -13,7 +13,8 @@ export function useAxiosDefaults() {
     // Add request interceptor to attach token
     const requestInterceptor = axios.interceptors.request.use(
       (config) => {
-        config.headers["X-Frontend-Secret"] = process.env.NEXT_PUBLIC_SECRET_KEY
+        config.headers["X-Frontend-Secret"] = process.env.NEXT_PUBLIC_SECRET_KEY;
+        console.log("Header",process.env.NEXT_PUBLIC_SECRET_KEY)
         const token = localStorage.getItem("token"); // Get token from localStorage
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
